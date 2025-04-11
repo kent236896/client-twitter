@@ -41,7 +41,7 @@ Recent interactions between {{agentName}} and other users:
 
 {{recentPosts}}
 
-# TASK: Generate a post/reply in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}) while using the thread of tweets as additional context:
+# TASK: Generate a post/reply within 260 characters in the voice, style and perspective of {{agentName}} (@{{twitterUserName}}) while using the thread of tweets as additional context:
 
 Current Post:
 {{currentPost}}
@@ -151,7 +151,7 @@ export class TwitterInteractionClient {
                             const userTweets = (
                                 await this.client.twitterClient.fetchSearchTweets(
                                     `from:${username}`,
-                                    3,
+                                    20,
                                     SearchMode.Latest
                                 )
                             ).tweets;
@@ -164,7 +164,7 @@ export class TwitterInteractionClient {
                                         this.client.lastCheckedTweetId;
                                 const isRecent =
                                     Date.now() - tweet.timestamp * 1000 <
-                                    2 * 60 * 60 * 1000;
+                                    24 * 60 * 60 * 1000;
 
                                 elizaLogger.log(`Tweet ${tweet.id} checks:`, {
                                     isUnprocessed,
@@ -562,7 +562,7 @@ export class TwitterInteractionClient {
 
     async buildConversationThread(
         tweet: Tweet,
-        maxReplies = 10
+        maxReplies = 1
     ): Promise<Tweet[]> {
         const thread: Tweet[] = [];
         const visited: Set<string> = new Set();
